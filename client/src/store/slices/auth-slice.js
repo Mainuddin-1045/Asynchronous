@@ -1,11 +1,4 @@
-import React from 'react'
-
-const authslice = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
-
-export default authslice
+export const createAuthSlice = (set) => ({
+  userInfo: undefined,
+  setUserInfo: (userInfo) => set({ userInfo }),
+});

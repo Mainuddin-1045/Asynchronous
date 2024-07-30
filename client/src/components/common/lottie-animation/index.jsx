@@ -1,11 +1,15 @@
-import React from 'react'
+import { animationDefaultOptions } from "@/lib/utils";
+import Lottie from "react-lottie";
 
-const index = () => {
+const LottieAnimation = () => {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <Lottie
+      isClickToPauseDisabled={true}
+      options={animationDefaultOptions}
+      height={200}
+      width={200}
+    />
+  );
+};
 
-export default index
+export default LottieAnimation;

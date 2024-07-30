@@ -1,11 +1,8 @@
-import React from 'react'
+import { create } from "zustand";
+import { createAuthSlice } from "./slices/auth-slice";
+//import { createChatSlice } from "./slices/chat-slice";
 
-const index = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
-
-export default index
+export const useAppStore = create()((...a) => ({
+  ...createAuthSlice(...a),
+ // ...createChatSlice(...a),
+}));
