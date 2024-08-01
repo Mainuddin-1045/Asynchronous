@@ -1,14 +1,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import apiClient from "@/lib/api-client";
 import {
-  //FETCH_ALL_MESSAGES_ROUTE,
-  //GET_CHANNEL_MESSAGES,
+  FETCH_ALL_MESSAGES_ROUTE,
+  GET_CHANNEL_MESSAGES,
   HOST,
- // MESSAGE_TYPES,
+  MESSAGE_TYPES,
 } from "@/lib/constants";
 import { getColor } from "@/lib/utils";
 import { useAppStore } from "@/store";
-//import moment from "moment";
+import moment from "moment";
 import { useEffect, useRef, useState } from "react";
 import { IoMdArrowRoundDown } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
@@ -28,34 +28,34 @@ const MessageContainer = () => {
   } = useAppStore();
   const messageEndRef = useRef(null);
 
-  // useEffect(() => {
-  //   const getMessages = async () => {
-  //     const response = await apiClient.post(
-  //       FETCH_ALL_MESSAGES_ROUTE,
-  //       {
-  //         id: selectedChatData._id,
-  //       },
-  //       { withCredentials: true }
-  //     );
+  useEffect(() => {
+    const getMessages = async () => {
+      const response = await apiClient.post(
+        FETCH_ALL_MESSAGES_ROUTE,
+        {
+          id: selectedChatData._id,
+        },
+        { withCredentials: true }
+      );
 
-  //     if (response.data.messages) {
-  //       setSelectedChatMessages(response.data.messages);
-  //     }
-  //   };
-  //   const getChannelMessages = async () => {
-  //     const response = await apiClient.get(
-  //       `${GET_CHANNEL_MESSAGES}/${selectedChatData._id}`,
-  //       { withCredentials: true }
-  //     );
-  //     if (response.data.messages) {
-  //       setSelectedChatMessages(response.data.messages);
-  //     }
-  //   };
-  //   if (selectedChatData._id) {
-  //     if (selectedChatType === "contact") getMessages();
-  //     else if (selectedChatType === "channel") getChannelMessages();
-  //   }
-  // }, [selectedChatData, selectedChatType, setSelectedChatMessages]);
+      if (response.data.messages) {
+        setSelectedChatMessages(response.data.messages);
+      }
+    };
+    const getChannelMessages = async () => {
+      const response = await apiClient.get(
+        `${GET_CHANNEL_MESSAGES}/${selectedChatData._id}`,
+        { withCredentials: true }
+      );
+      if (response.data.messages) {
+        setSelectedChatMessages(response.data.messages);
+      }
+    };
+    if (selectedChatData._id) {
+      if (selectedChatType === "contact") getMessages();
+      else if (selectedChatType === "channel") getChannelMessages();
+    }
+  }, [selectedChatData, selectedChatType, setSelectedChatMessages]);
 
   useEffect(() => {
     if (messageEndRef.current) {
@@ -92,91 +92,91 @@ const MessageContainer = () => {
   //   setDownloadProgress(0);
   // };
 
-  // const renderMessages = () => {
-  //   let lastDate = null;
-  //   return selectedChatMessages.map((message, index) => {
-  //     const messageDate = moment(message.timestamp).format("YYYY-MM-DD");
-  //     const showDate = messageDate !== lastDate;
-  //     lastDate = messageDate;
+  const renderMessages = () => {
+    let lastDate = null;
+    return selectedChatMessages.map((message, index) => {
+      const messageDate = moment(message.timestamp).format("YYYY-MM-DD");
+      const showDate = messageDate !== lastDate;
+      lastDate = messageDate;
 
-  //     return (
-  //       <div key={index} className="">
-  //         {showDate && (
-  //           <div className="text-center text-gray-500 my-2">
-  //             {moment(message.timestamp).format("LL")}
-  //           </div>
-  //         )}
-  //         {selectedChatType === "contact" && renderPersonalMessages(message)}
-  //         {selectedChatType === "channel" && renderChannelMessages(message)}
-  //       </div>
-  //     );
-  //   });
-  // };
+      return (
+        <div key={index} className="">
+          {showDate && (
+            <div className="text-center text-gray-500 my-2">
+              {moment(message.timestamp).format("LL")}
+            </div>
+          )}
+          {selectedChatType === "contact" && renderPersonalMessages(message)}
+          {selectedChatType === "channel" && renderChannelMessages(message)}
+        </div>
+      );
+    });
+  };
 
-  // const renderPersonalMessages = (message) => {
-  //   return (
-  //     <div
-  //       className={`message  ${
-  //         message.sender === selectedChatData._id ? "text-left" : "text-right"
-  //       }`}
-  //     >
-  //       {message.messageType === MESSAGE_TYPES.TEXT && (
-  //         <div
-  //           className={`${
-  //             message.sender !== selectedChatData._id
-  //               ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
-  //               : "bg-[#2a2b33]/50 text-white/80 border-[#ffffff]/20"
-  //           } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
-  //         >
-  //           {message.content}
-  //         </div>
-  //       )}
-  //       {message.messageType === MESSAGE_TYPES.FILE && (
-  //         <div
-  //           className={`${
-  //             message.sender !== selectedChatData._id
-  //               ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
-  //               : "bg-[#2a2b33]/50 text-white/80 border-[#ffffff]/20"
-  //           } border inline-block p-4 rounded my-1 lg:max-w-[50%] break-words`}
-  //         >
-  //           {checkIfImage(message.fileUrl) ? (
-  //             <div
-  //               className="cursor-pointer"
-  //               onClick={() => {
-  //                 setShowImage(true);
-  //                 setImageURL(message.fileUrl);
-  //               }}
-  //             >
-  //               <img
-  //                 src={`${HOST}/${message.fileUrl}`}
-  //                 alt=""
-  //                 height={300}
-  //                 width={300}
-  //               />
-  //             </div>
-  //           ) : (
-  //             <div className="flex items-center justify-center gap-5">
-  //               <span className="text-white/80 text-3xl bg-black/20 rounded-full p-3">
-  //                 <MdFolderZip />
-  //               </span>
-  //               <span>{message.fileUrl.split("/").pop()}</span>
-  //               <span
-  //                 className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
-  //                 onClick={() => downloadFile(message.fileUrl)}
-  //               >
-  //                 <IoMdArrowRoundDown />
-  //               </span>
-  //             </div>
-  //           )}
-  //         </div>
-  //       )}
+  const renderPersonalMessages = (message) => {
+    return (
+      <div
+        className={`message  ${
+          message.sender === selectedChatData._id ? "text-left" : "text-right"
+        }`}
+      >
+        {message.messageType === MESSAGE_TYPES.TEXT && (
+          <div
+            className={`${
+              message.sender !== selectedChatData._id
+                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                : "bg-[#2a2b33]/50 text-white/80 border-[#ffffff]/20"
+            } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
+          >
+            {message.content}
+          </div>
+        )}
+        {message.messageType === MESSAGE_TYPES.FILE && (
+          <div
+            className={`${
+              message.sender !== selectedChatData._id
+                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                : "bg-[#2a2b33]/50 text-white/80 border-[#ffffff]/20"
+            } border inline-block p-4 rounded my-1 lg:max-w-[50%] break-words`}
+          >
+            {checkIfImage(message.fileUrl) ? (
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  setShowImage(true);
+                  setImageURL(message.fileUrl);
+                }}
+              >
+                <img
+                  src={`${HOST}/${message.fileUrl}`}
+                  alt=""
+                  height={300}
+                  width={300}
+                />
+              </div>
+            ) : (
+              <div className="flex items-center justify-center gap-5">
+                <span className="text-white/80 text-3xl bg-black/20 rounded-full p-3">
+                  <MdFolderZip />
+                </span>
+                <span>{message.fileUrl.split("/").pop()}</span>
+                <span
+                  className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+                  onClick={() => downloadFile(message.fileUrl)}
+                >
+                  <IoMdArrowRoundDown />
+                </span>
+              </div>
+            )}
+          </div>
+        )}
 
-  //       <div className="text-xs text-gray-600">
-  //         {moment(message.timestamp).format("LT")}
-  //       </div>
-  //     </div>
-  //   );
-  // };
+        <div className="text-xs text-gray-600">
+          {moment(message.timestamp).format("LT")}
+        </div>
+      </div>
+    );
+  };
 
   // const renderChannelMessages = (message) => {
   //   return (
@@ -270,7 +270,7 @@ const MessageContainer = () => {
 
   return (
     <div className="flex-1 overflow-y-auto scrollbar-hidden p-4 px-8 md:w-[65vw] lg:w-[70vw] xl:w-[80vw] w-full">
-      {/* {renderMessages()} */}
+      {renderMessages()}
       <div ref={messageEndRef} />
       {showImage && (
         <div className="fixed z-[1000] top-0 left-0 h-[100vh] w-[100vw] flex items-center justify-center backdrop-blur-lg flex-col">

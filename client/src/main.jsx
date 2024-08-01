@@ -4,17 +4,13 @@ import App from "./App.jsx";
 import { Toaster } from "@/components/ui/sonner";
 
 import "./index.css";
-//import { SocketProvider } from "./contexts/SocketContext";
+import { SocketProvider } from "./contexts/SocketContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <SocketProvider>
-  //   <App />
-  //   <Toaster closeButton richColors />
-  // </SocketProvider>
+  <SocketProvider>
+    <App />
+    <Toaster closeButton richColors />
+  </SocketProvider>
 
-  // delete this below code
-  <>
-  <App />
-  <Toaster closeButton richColors />
-  </>
+ 
 );

@@ -4,23 +4,23 @@ import { RiEmojiStickerLine } from "react-icons/ri";
 import EmojiPicker from "emoji-picker-react";
 import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "@/store";
-//import { useSocket } from "@/contexts/SocketContext";
-//import { MESSAGE_TYPES, UPLOAD_FILE } from "@/lib/constants";
+import { useSocket } from "@/contexts/SocketContext";
+import { MESSAGE_TYPES, } from "@/lib/constants";
 import apiClient from "@/lib/api-client";
 
 const MessageBar = () => {
   const emojiRef = useRef();
   const fileInputRef = useRef();
   const {
-    //selectedChatData,
+    selectedChatData,
     userInfo,
-    //selectedChatType,
+    selectedChatType,
     //setIsUploading,
     //setFileUploadProgress,
   } = useAppStore();
   const [message, setMessage] = useState("");
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
- // const socket = useSocket();
+  const socket = useSocket();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -42,28 +42,28 @@ const MessageBar = () => {
     setMessage(event.target.value);
   };
 
-  // const handleSendMessage = async () => {
-  //   if (selectedChatType === "contact") {
-  //     socket.emit("sendMessage", {
-  //       sender: userInfo.id,
-  //       content: message,
-  //       recipient: selectedChatData._id,
-  //       messageType: MESSAGE_TYPES.TEXT,
-  //       audioUrl: undefined,
-  //       fileUrl: undefined,
-  //     });
-  //   } else if (selectedChatType === "channel") {
-  //     socket.emit("send-channel-message", {
-  //       sender: userInfo.id,
-  //       content: message,
-  //       messageType: MESSAGE_TYPES.TEXT,
-  //       audioUrl: undefined,
-  //       fileUrl: undefined,
-  //       channelId: selectedChatData._id,
-  //     });
-  //   }
-  //   setMessage("");
-  // };
+  const handleSendMessage = async () => {
+    if (selectedChatType === "contact") {
+      socket.emit("sendMessage", {
+        sender: userInfo.id,
+        content: message,
+        recipient: selectedChatData._id,
+        messageType: MESSAGE_TYPES.TEXT,
+        audioUrl: undefined,
+        fileUrl: undefined,
+      });
+    } else if (selectedChatType === "channel") {
+      socket.emit("send-channel-message", {
+        sender: userInfo.id,
+        content: message,
+        messageType: MESSAGE_TYPES.TEXT,
+        audioUrl: undefined,
+        fileUrl: undefined,
+        channelId: selectedChatData._id,
+      });
+    }
+    setMessage("");
+  };
 
   // const handleAttachmentChange = async (event) => {
   //   try {
@@ -123,7 +123,7 @@ const MessageBar = () => {
           className="flex-1 p-5 bg-transparent rounded-md focus:border-none focus:outline-none"
           placeholder="Enter message"
           value={message}
-         // onChange={handleMessageChange}
+          onChange={handleMessageChange}
         />
         <button
           className="text-neutral-300 focus:border-none focus:outline-none focus:text-white transition-all duration-300"
@@ -156,7 +156,7 @@ const MessageBar = () => {
       </div>
       <button
         className="bg-[#8417ff] rounded-md flex items-center justify-center p-5 gap-2 focus:border-none focus:outline-none hover:bg-[#741bda] focus:bg-[#741bda] transition-all duration-300 "
-       // onClick={handleSendMessage}
+        onClick={handleSendMessage}
       >
         <IoSend className="text-2xl" />
       </button>
