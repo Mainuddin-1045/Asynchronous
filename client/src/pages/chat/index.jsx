@@ -40,18 +40,13 @@ const Chat = () => {
         </div>
       )}
       <ContactsContainer />
-      {/* {selectedChatType === undefined ? (
+      {selectedChatType === undefined ? (
         <EmptyChatContainer />
       ) : (
         <ChatContainer />
-      )} */}
-      <ChatContainer />
+      )}
     </div>
   );
 };
 
 export default Chat;
-
-
-
-

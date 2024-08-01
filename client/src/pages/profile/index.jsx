@@ -3,12 +3,12 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import apiClient from "@/lib/api-client";
- import {
-   ADD_PROFILE_IMAGE_ROUTE,
-   HOST,
-   REMOVE_PROFILE_IMAGE_ROUTE,
-   UPDATE_PROFLE_ROUTE,
- } from "@/lib/constants";
+import {
+  ADD_PROFILE_IMAGE_ROUTE,
+  HOST,
+  REMOVE_PROFILE_IMAGE_ROUTE,
+  UPDATE_PROFLE_ROUTE,
+} from "@/lib/constants";
 import { useState, useRef, useEffect } from "react";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -26,28 +26,28 @@ const Profile = () => {
   const navigate = useNavigate();
   const [selectedColor, setSelectedColor] = useState(0);
 
-   useEffect(() => {
-     if (userInfo.profileSetup) {
+  useEffect(() => {
+    if (userInfo.profileSetup) {
       setFirstName(userInfo.firstName);
-       setLastName(userInfo.lastName);
-       setSelectedColor(userInfo.color);
-     }
-     if (userInfo.image) {
-       setImage(`${HOST}/${userInfo.image}`);
-     }
-   }, [userInfo]);
+      setLastName(userInfo.lastName);
+      setSelectedColor(userInfo.color);
+    }
+    if (userInfo.image) {
+      setImage(`${HOST}/${userInfo.image}`);
+    }
+  }, [userInfo]);
 
-    const validateProfile = () => {
-      if (!firstName) {
-        toast.error("First Name is Required.");
-        return false;
-      }
-      if (!lastName) {
-        toast.error("Last Name is Required.");
-        return false;
-      }
-      return true;
-    };
+  const validateProfile = () => {
+    if (!firstName) {
+      toast.error("First Name is Required.");
+      return false;
+    }
+    if (!lastName) {
+      toast.error("Last Name is Required.");
+      return false;
+    }
+    return true;
+  };
 
   const saveChanges = async () => {
     if (validateProfile()) {
@@ -108,7 +108,6 @@ const Profile = () => {
   };
 
   const handleFileInputClick = () => {
-    
     fileInputRef.current.click();
   };
 
@@ -230,4 +229,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
