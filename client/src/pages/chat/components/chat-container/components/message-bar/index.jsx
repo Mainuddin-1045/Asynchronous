@@ -5,7 +5,7 @@ import EmojiPicker from "emoji-picker-react";
 import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "@/store";
 import { useSocket } from "@/contexts/SocketContext";
-import { MESSAGE_TYPES, } from "@/lib/constants";
+import { MESSAGE_TYPES, UPLOAD_FILE } from "@/lib/constants";
 import apiClient from "@/lib/api-client";
 
 const MessageBar = () => {
@@ -15,8 +15,8 @@ const MessageBar = () => {
     selectedChatData,
     userInfo,
     selectedChatType,
-    //setIsUploading,
-    //setFileUploadProgress,
+    setIsUploading,
+    setFileUploadProgress,
   } = useAppStore();
   const [message, setMessage] = useState("");
   const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
@@ -65,49 +65,49 @@ const MessageBar = () => {
     setMessage("");
   };
 
-  // const handleAttachmentChange = async (event) => {
-  //   try {
-  //     const file = event.target.files[0];
+  const handleAttachmentChange = async (event) => {
+    try {
+      const file = event.target.files[0];
 
-  //     if (file) {
-  //       const formData = new FormData();
-  //       formData.append("file", file);
-  //       setIsUploading(true);
-  //       const response = await apiClient.post(UPLOAD_FILE, formData, {
-  //         withCredentials: true,
-  //         onUploadProgress: (data) => {
-  //           setFileUploadProgress(Math.round((100 * data.loaded) / data.total));
-  //         },
-  //       });
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        setIsUploading(true);
+        const response = await apiClient.post(UPLOAD_FILE, formData, {
+          withCredentials: true,
+          onUploadProgress: (data) => {
+            setFileUploadProgress(Math.round((100 * data.loaded) / data.total));
+          },
+        });
 
-  //       if (response.status === 200 && response.data) {
-  //         setIsUploading(false);
-  //         if (selectedChatType === "contact") {
-  //           socket.emit("sendMessage", {
-  //             sender: userInfo.id,
-  //             content: undefined,
-  //             recipient: selectedChatData._id,
-  //             messageType: MESSAGE_TYPES.FILE,
-  //             audioUrl: undefined,
-  //             fileUrl: response.data.filePath,
-  //           });
-  //         } else if (selectedChatType === "channel") {
-  //           socket.emit("send-channel-message", {
-  //             sender: userInfo.id,
-  //             content: undefined,
-  //             messageType: MESSAGE_TYPES.FILE,
-  //             audioUrl: undefined,
-  //             fileUrl: response.data.filePath,
-  //             channelId: selectedChatData._id,
-  //           });
-  //         }
-  //       }
-  //     }
-  //   } catch (error) {
-  //     setIsUploading(false);
-  //     console.log({ error });
-  //   }
-  // };
+        if (response.status === 200 && response.data) {
+          setIsUploading(false);
+          if (selectedChatType === "contact") {
+            socket.emit("sendMessage", {
+              sender: userInfo.id,
+              content: undefined,
+              recipient: selectedChatData._id,
+              messageType: MESSAGE_TYPES.FILE,
+              audioUrl: undefined,
+              fileUrl: response.data.filePath,
+            });
+          } else if (selectedChatType === "channel") {
+            socket.emit("send-channel-message", {
+              sender: userInfo.id,
+              content: undefined,
+              messageType: MESSAGE_TYPES.FILE,
+              audioUrl: undefined,
+              fileUrl: response.data.filePath,
+              channelId: selectedChatData._id,
+            });
+          }
+        }
+      }
+    } catch (error) {
+      setIsUploading(false);
+      console.log({ error });
+    }
+  };
 
   const handleAttachmentClick = () => {
     if (fileInputRef.current) {
@@ -127,7 +127,7 @@ const MessageBar = () => {
         />
         <button
           className="text-neutral-300 focus:border-none focus:outline-none focus:text-white transition-all duration-300"
-         // onClick={handleAttachmentClick} // Trigger the file input click
+          onClick={handleAttachmentClick} // Trigger the file input click
         >
           <GrAttachment className="text-2xl" />
         </button>
@@ -135,7 +135,7 @@ const MessageBar = () => {
           type="file"
           className="hidden" // Hide the file input element
           ref={fileInputRef}
-         // onChange={handleAttachmentChange} // Handle file selection
+          onChange={handleAttachmentChange} // Handle file selection
         />
         <div className="relative">
           <button
