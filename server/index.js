@@ -15,13 +15,7 @@ const app = express();
 const port = process.env.PORT;
 const databaseURL = process.env.DATABSE_URL;
 
-app.use(
-  cors({
-    origin: [process.env.ORIGIN],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    credentials: true,
-  })
-);
+cd
 
  app.use("/uploads/profiles", express.static("uploads/profiles"));
  app.use("/uploads/files", express.static("uploads/files"));
